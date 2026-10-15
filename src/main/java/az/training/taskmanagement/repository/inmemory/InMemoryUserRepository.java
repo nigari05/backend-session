@@ -36,6 +36,14 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public List<User> findByName(String name) {
+        return storage.values()
+                .stream()
+                .filter(user -> user.getName() != null
+                        && user.getName().equalsIgnoreCase(name))
+                .toList();    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return storage.values().stream()
                 .anyMatch(u -> u.getEmail() != null && u.getEmail().equalsIgnoreCase(email));

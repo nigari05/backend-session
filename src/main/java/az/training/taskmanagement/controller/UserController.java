@@ -3,6 +3,7 @@ package az.training.taskmanagement.controller;
 import az.training.taskmanagement.dto.CreateUserRequest;
 import az.training.taskmanagement.dto.TaskResponse;
 import az.training.taskmanagement.dto.UserResponse;
+import az.training.taskmanagement.model.User;
 import az.training.taskmanagement.service.TaskService;
 import az.training.taskmanagement.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User REST controller.
@@ -51,7 +53,10 @@ public class UserController {
     public List<TaskResponse> getUserTasks(@PathVariable Long id) {
         return taskService.getTasksByUser(id);
     }
-
+    @GetMapping("/tasks")
+   public List<User> getUserByName(@RequestParam String name ) {
+        return userService.getUserByName(name);
+   }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteUser(id);

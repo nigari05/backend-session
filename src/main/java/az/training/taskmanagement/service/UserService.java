@@ -2,8 +2,10 @@ package az.training.taskmanagement.service;
 
 import az.training.taskmanagement.dto.CreateUserRequest;
 import az.training.taskmanagement.dto.UserResponse;
+import az.training.taskmanagement.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User business logic kontraktı.
@@ -15,7 +17,8 @@ public interface UserService {
 
     UserResponse getUserById(Long id);
 
-    List<UserResponse> getAllUsers();
+    List<User> getUserByName(String name);
 
+    List<UserResponse> getAllUsers();
     void deleteUser(Long id);
 }

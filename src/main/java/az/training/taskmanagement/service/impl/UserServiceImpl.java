@@ -11,6 +11,7 @@ import az.training.taskmanagement.repository.UserRepository;
 import az.training.taskmanagement.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class UserServiceImpl implements UserService {
@@ -40,6 +41,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserById(Long id) {
         return UserMapper.toResponse(findUserOrThrow(id));
+    }
+
+    @Override
+    public List<User> getUserByName(String name){
+        return userRepository.findByName(name);
     }
 
     @Override
