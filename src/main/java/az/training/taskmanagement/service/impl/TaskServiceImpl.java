@@ -11,6 +11,8 @@ import az.training.taskmanagement.model.TaskStatus;
 import az.training.taskmanagement.repository.TaskRepository;
 import az.training.taskmanagement.repository.UserRepository;
 import az.training.taskmanagement.service.TaskService;
+import az.training.taskmanagement.dto.ReplaceTaskRequest;
+import az.training.taskmanagement.model.Priority;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,6 +62,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskResponse> getTasksByPriority(Priority priority) {
+
+        return taskRepository.findAll()
+                .stream()
+                .filter(task -> task.getPriority() == priority)
+                .map(TaskMapper::toResponse)
+                .toList();
+    }
+
+
+    @Override
     public List<TaskResponse> getTasksByUser(Long userId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw ResourceNotFoundException.of("User", userId);
@@ -87,6 +100,35 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdatedAt(LocalDateTime.now());
         return TaskMapper.toResponse(taskRepository.save(task));
     }
+
+    @Override
+    public TaskResponse replaceTask(Long id, ReplaceTaskRequest request) {
+
+        Task task = findTaskOrThrow(id);
+
+        if (request.title() == null || request.title().isBlank()) {
+            throw new ValidationException("title boş ola bilməz");
+        }
+
+        if (request.status() == null) {
+            throw new ValidationException("status boş ola bilməz");
+        }
+
+        if (request.priority() == null) {
+            throw new ValidationException("priority boş ola bilməz");
+        }
+
+        task.setTitle(request.title());
+        task.setDescription(request.description());
+        task.setStatus(request.status());
+        task.setPriority(request.priority());
+        task.setUpdatedAt(LocalDateTime.now());
+
+        return TaskMapper.toResponse(
+                taskRepository.save(task)
+        );
+    }
+
 
     @Override
     public void deleteTask(Long id) {

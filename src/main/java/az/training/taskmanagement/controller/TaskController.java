@@ -8,6 +8,8 @@ import az.training.taskmanagement.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import az.training.taskmanagement.dto.ReplaceTaskRequest;
+import az.training.taskmanagement.model.Priority;
 
 import java.util.List;
 
@@ -29,7 +31,13 @@ public class TaskController {
 
     // GET /tasks  və  GET /tasks?status=TODO
     @GetMapping
-    public List<TaskResponse> getAll(@RequestParam(required = false) TaskStatus status) {
+    public List<TaskResponse> getAll(@RequestParam(required = false) TaskStatus status, @RequestParam(required = false) Priority priority) {
+
+        if (priority != null) {
+            return taskService.getTasksByPriority(priority);
+        }
+
+
         return taskService.getTasks(status);
     }
 
@@ -41,6 +49,11 @@ public class TaskController {
     @PatchMapping("/{id}")
     public TaskResponse update(@PathVariable Long id, @RequestBody UpdateTaskRequest request) {
         return taskService.updateTask(id, request);
+    }
+
+    @PutMapping("/{id}")
+    public TaskResponse replace(@PathVariable Long id, @RequestBody ReplaceTaskRequest request) {
+        return taskService.replaceTask(id, request);
     }
 
     @DeleteMapping("/{id}")

@@ -4,6 +4,8 @@ import az.training.taskmanagement.dto.CreateTaskRequest;
 import az.training.taskmanagement.dto.TaskResponse;
 import az.training.taskmanagement.dto.UpdateTaskRequest;
 import az.training.taskmanagement.model.TaskStatus;
+import az.training.taskmanagement.dto.ReplaceTaskRequest;
+import az.training.taskmanagement.model.Priority;
 
 import java.util.List;
 
@@ -23,4 +25,9 @@ public interface TaskService {
     TaskResponse updateTask(Long id, UpdateTaskRequest request);
 
     void deleteTask(Long id);
+
+    List<TaskResponse> getTasksByPriority(Priority priority);
+
+    TaskResponse replaceTask(Long id, ReplaceTaskRequest request);
+
 }
